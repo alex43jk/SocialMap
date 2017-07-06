@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Hello">Hello World, Click Me!</string>
+    <string name="ApplicationName">XamarinGoogleMapDemo</string>
+  <string name="GoogleKey">AIzaSyCKbWTftgX5O6nGA0_6Mmx2yBKjv2SMDmo</string>
+</resources>
