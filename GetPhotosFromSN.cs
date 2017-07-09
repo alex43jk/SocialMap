@@ -29,23 +29,23 @@ namespace XamarinGoogleMapDemo
             double lat = 46.7404283551898, lng = 28.8811472434254;
             string request = "https://api.vk.com/method/photos.search?lat=";
             string url = request +
-                Convert.ToString(lat) +
+                Convert.ToString(lat, System.Globalization.CultureInfo.InvariantCulture) +
                 "&long=" +
-                Convert.ToString(lng) +
+                Convert.ToString(lng, System.Globalization.CultureInfo.InvariantCulture) +
                 "&v=5.65";
 
             //Serialize
-            var photo = await GetPhotoList(url);
+            var photos = await GetPhotoList(url);
             //string asdas = "23423";
 
 
             //Add photos in layout
             Picasso.With(this)
-                .Load(photo.photo_130.ToString())
+                .Load(photos[0].Photo_130.ToString())
                 .Into(FindViewById<ImageView>(Resource.Id.imageView1));
         }
 
-        private async Task<Photo> GetPhotoList(string url)
+        private async Task<List<Photo>> GetPhotoList(string url)
         {
             var result = new List<Photo>();
             var httpClient = new HttpClient(new HttpClientHandler())
@@ -62,16 +62,28 @@ namespace XamarinGoogleMapDemo
                 var content = resp.Content;
                 string task = await content.ReadAsStringAsync().ConfigureAwait(false);
 
-                return JsonConvert.DeserializeObject<Photo>(task);
+                var test =  JsonConvert.DeserializeObject<Root>(task);
+                return test.Response.Items;
             }
-            return new Photo();
+            return new List<Photo>();
+        }
+
+        public class Root
+        {
+            public Response Response { get; set; }
+        }
+
+        public class Response
+        {
+            public int Count { get; set; }
+            public List<Photo> Items { get; set; }
         }
 
         public class Photo
         {
-            public string photo_130 { get; set; }
+            public long Id { get; set; }
 
-            public List<Photo> photo { get; set; }
+            public string Photo_130 { get; set; }
         }
     }
 }
